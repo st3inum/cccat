@@ -1,0 +1,8 @@
+HEAD_CMD=""; CCCAT_ARGS=" ./tests/test_add.cpp"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat $CCCAT_ARGS")
+HEAD_CMD=""; CCCAT_ARGS=" ./tests/test.txt"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat $CCCAT_ARGS")
+HEAD_CMD=""; CCCAT_ARGS=" ./tests/test2.txt"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat $CCCAT_ARGS")
+HEAD_CMD="head -n1 ./tests/test.txt |"; CCCAT_ARGS=" -"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat $CCCAT_ARGS")
+HEAD_CMD=""; CCCAT_ARGS=" ./tests/test.txt ./tests/test2.txt"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat" $CCCAT_ARGS)
+HEAD_CMD="head -n3 ./tests/test.txt |"; CCCAT_ARGS=" -n"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat $CCCAT_ARGS")
+HEAD_CMD="sed G ./tests/test.txt |"; CCCAT_ARGS=" -n | head -n4"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat" $CCCAT_ARGS)
+HEAD_CMD="sed G ./tests/test.txt |"; CCCAT_ARGS=" -b | head -n5"; eval "$HEAD_CMD ./build/cccat $CCCAT_ARGS" | diff - <(eval "$HEAD_CMD cat" $CCCAT_ARGS)

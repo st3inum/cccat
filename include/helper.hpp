@@ -4,17 +4,14 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 std::string readFromFile(const std::string &filename);
 
 std::string readFromStdin();
 
-// int countLines(std::string &s);
+std::string applyNumberEffect(std::string &s);
 
-// int countWords(std::string &s);
-
-// int countBytes(std::string &s);
-
-// int countMultiBytes(const std::string &s);
+std::string applyNonBlankNumberEffect(std::string &s);
 
 #endif

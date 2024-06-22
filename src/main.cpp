@@ -11,11 +11,9 @@ int main(int argc, char *argv[]) {
 		po::options_description desc("Allowed options");
 		desc.add_options()
 			("help,h", "produce help message")
-			("lines,l", "count lines")
-			("words,w", "count words")
-			("multibytes,m", "count multi bytes")
-			("bytes,c", "count bytes")
-			("file", po::value<std::string>(), "input file");
+			("number-nonblank,b", "number nonempty output lines, overrides -n")
+			("number,n", "number all output lines")
+			("file", po::value<std::vector<std::string>>()->multitoken(), "input file(s)");
 
 		po::positional_options_description p;
 		p.add("file", -1);
@@ -30,17 +28,37 @@ int main(int argc, char *argv[]) {
 			std::cout << desc << "\n";
 			return 1;
 		}
+		bool showNumber = vm.count("number");
+		bool showNonBlankNumber = vm.count("number-nonblank");
+		// if (vm.count("number-nonblank")) {
+		// 	std::cout << "-b (number nonempty output lines) was set.\n";
+		// }
+		// if (vm.count("number")) {
+		// 	std::cout << "-n (number all output lines) was set.\n";
+		// }
 
-		std::string file_string = vm.count("file") ? readFromFile(vm["file"].as<std::string>()) : readFromStdin();
-		bool count_lines = vm.count("lines");
-		bool count_words = vm.count("words");
-		bool count_multibytes = vm.count("multibytes");
-		bool count_bytes = vm.count("bytes");
-		bool show_file = vm.count("file");
-		if (!(count_lines || count_words || count_bytes || count_multibytes)) {
-			count_lines = count_words = count_bytes = true;
+		std::string file_string = "";
+		if (vm.count("file")) {
+			std::vector<std::string> files = vm["file"].as<std::vector<std::string>>();
+			for (const auto &file : files) {
+				// std::cout << "file name: " << file << '\n';
+				if(file == "-") {
+					file_string += readFromStdin();
+				} else {
+					file_string += readFromFile(file);
+				}
+			}
+		} else {
+			file_string += readFromStdin();
 		}
-        std::cout << "hello world\n";
+
+		if(showNonBlankNumber) {
+			std::cout << applyNonBlankNumberEffect(file_string);
+		} else if(showNumber) {
+			std::cout << applyNumberEffect(file_string);
+		} else {
+			std::cout << file_string;
+		}
 	} catch (std::exception &e) {
 		std::cerr << "Error: " << e.what() << "\n";
 		return 1;
